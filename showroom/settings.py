@@ -78,10 +78,12 @@ WSGI_APPLICATION = 'showroom.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'showroom',
-        'USER':'root',
-        'PASSWORD':'2002'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'showroomdb_fq30',
+        'USER': 'showroomdb_fq30_user',
+        'PASSWORD': 'jTw82YKAMALLNm4m3896UGBk1VSjepkK',
+        'HOST': 'dpg-d86jpdnavr4c73e65kj0-a',
+        'PORT': '5432',
     }
 }
 
