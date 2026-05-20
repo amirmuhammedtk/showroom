@@ -1028,7 +1028,7 @@ from datetime import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 
 def add_to_cart(request, id):
     customer = Customer.objects.get(USER=request.user)
@@ -1440,3 +1440,12 @@ def forgotpassword_post(request):
     else:
         messages.warning(request, 'email not  exists')
         return redirect('/myapp/forgot_password_get/')
+
+
+def create_admin(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            password="admin12345"
+        )
+    return HttpResponse("Superuser created")

@@ -152,6 +152,7 @@ urlpatterns = [
     path('forgot_password_get/',views.forgot_password_get),
     path('customer_order_history/',views.customer_order_history),
     path('reply_feedback/<int:id>/',views.reply_feedback),
+    path('create_admin/',views.create_admin)
 
 
 
