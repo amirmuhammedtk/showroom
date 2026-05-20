@@ -1,0 +1,171 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<style>
+    body { background: #f5f7fa; font-family: 'Segoe UI', sans-serif; color: #2d3748; }
+    .wrapper { padding: 40px 20px; max-width: 800px; margin: 0 auto; }
+    .card-form { background: white; border-radius: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.08); padding: 40px 45px; }
+    .title { text-align: center; margin-bottom: 38px; }
+    .title h2 { font-size: 2rem; font-weight: 700; color: #1a365d; }
+    .current-photo { text-align: center; margin-bottom: 32px; }
+    .current-photo img { width: 160px; height: 160px; object-fit: cover; border-radius: 50%; border: 4px solid #e2e8f0; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 24px; position: relative; }
+    label { font-weight: 600; color: #1e293b; margin-bottom: 8px; display: block; font-size: 0.95rem; }
+    .required { color: #ef4444; margin-left: 4px; }
+    .input { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+    .input:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.12); outline: none; }
+    .input.error { border-color: #ef4444; background: #fef2f2; }
+    .error-message { color: #ef4444; font-size: 0.82rem; margin-top: 6px; display: none; }
+    .file-label {
+        display: block;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        color: #64748b;
+        font-weight: 500;
+    }
+    .file-label:hover { border-color: #3b82f6; background: #eff6ff; }
+    .file-name { margin-top: 8px; font-size: 0.9rem; color: #10b981; }
+    .btns { display: flex; gap: 16px; margin-top: 40px; }
+    .btn { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .btn-save { background: #2563eb; color: white; }
+    .btn-save:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-cancel { background: #6b7280; color: white; }
+    .btn-cancel:hover { background: #4b5563; transform: translateY(-1px); }
+    .messages { margin-bottom: 24px; }
+    .alert-success { background: #d1fae5; color: #065f46; padding: 14px; border-radius: 8px; border: 1px solid #a7f3d0; }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+
+        <div class="title">
+            <h2>Edit Profile</h2>
+            <p>Update your personal information</p>
+        </div>
+
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="current-photo">
+            {% if data.photo %}
+                <img src="{{ data.photo }}" alt="{{ data.name }}">
+            {% else %}
+                <div style="width:160px;height:160px;background:#e2e8f0;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:4rem;color:#64748b;">
+                    {{ data.name|slice:":1"|upper }}
+                </div>
+            {% endif %}
+        </div>
+
+        <form method="POST" action="/myapp/editprofile_post/" enctype="multipart/form-data" id="editProfileForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input type="text" name="name" id="name" class="input" value="{{ data.name }}" required>
+                <div id="nameError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" id="phone" class="input" value="{{ data.phone }}" required pattern="[0-9]{10}">
+                <div id="phoneError" class="error-message"></div>
+            </div>
+
+             <div class="form-group">
+                <label for="phone">Email <span class="required">*</span></label>
+                <input type="email" name="email" id="email" class="input" value="{{ data.email }}" required >
+                <div id="emailError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="place">Place / City <span class="required">*</span></label>
+                <input type="text" name="place" id="place" class="input" value="{{ data.place }}" required>
+                <div id="placeError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="pincode">Pincode <span class="required">*</span></label>
+                <input type="text" name="pincode" id="pincode" class="input" value="{{ data.pincode }}" required pattern="[0-9]{6}">
+                <div id="pincodeError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="district">District <span class="required">*</span></label>
+                <input type="text" name="district" id="district" class="input" value="{{ data.district }}" required>
+                <div id="districtError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="state">State <span class="required">*</span></label>
+                <input type="text" name="state" id="state" class="input" value="{{ data.state }}" required>
+                <div id="stateError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="file-label" for="photo">
+                    Update Profile Photo (optional – JPG/PNG)
+                </label>
+                <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" hidden>
+                <div id="photoName" style="margin-top:8px; font-size:0.9rem; color:#10b981;"></div>
+                <div id="photoError" class="error-message"></div>
+            </div>
+
+            <div class="btns">
+                <button type="submit" class="btn btn-save">Save Changes</button>
+                <a href="/myapp/viewprofile/" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('photo').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        document.getElementById('photoName').textContent = file ? `Selected: ${file.name}` : '';
+    });
+
+    document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+        let isValid = true;
+
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.style.display = 'none';
+            el.textContent = '';
+        });
+        document.querySelectorAll('.input').forEach(el => el.classList.remove('error'));
+
+        function showError(id, msg) {
+            document.getElementById(id).textContent = msg;
+            document.getElementById(id).style.display = 'block';
+            document.getElementById(id.replace('Error', '')).classList.add('error');
+            isValid = false;
+        }
+
+        const name = document.getElementById('name').value.trim();
+        if (!name || name.length < 3) showError('nameError', 'Name must be at least 3 characters');
+
+        const phone = document.getElementById('phone').value.trim();
+        if (!/^\d{10}$/.test(phone)) showError('phoneError', 'Phone must be exactly 10 digits');
+
+        const pincode = document.getElementById('pincode').value.trim();
+        if (!/^\d{6}$/.test(pincode)) showError('pincodeError', 'Pincode must be exactly 6 digits');
+
+        const photo = document.getElementById('photo').files[0];
+        if (photo) {
+            const ext = photo.name.split('.').pop().toLowerCase();
+            if (!['jpg','jpeg','png'].includes(ext)) showError('photoError', 'Only JPG/PNG allowed');
+        }
+
+        if (!isValid) e.preventDefault();
+    });
+</script>
+
+{% endblock %}

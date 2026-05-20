@@ -1,0 +1,97 @@
+{% extends 'ServiceCenter/servicecenterhome.html' %}
+{% block body %}
+
+<style>
+    body { background: #f5f7fa; font-family: 'Segoe UI', sans-serif; color: #2d3748; }
+    .wrapper { padding: 40px 20px; max-width: 1400px; margin: 0 auto; }
+    .page-header {
+        background: white;
+        padding: 24px 32px;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        margin-bottom: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .page-header h2 { font-size: 2rem; font-weight: 700; color: #1a365d; margin: 0; }
+    .btn-add { background: #2563eb; color: white; padding: 12px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; }
+    .btn-add:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .table-card { background: white; border-radius: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.08); padding: 32px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 16px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #1e293b; color: white; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
+    tr:hover { background: #f8fafc; }
+    .action-btn { padding: 8px 14px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; text-decoration: none; color: white; margin-right: 8px; display: inline-block; }
+    .btn-edit { background: #10b981; }
+    .btn-edit:hover { background: #059669; }
+    .btn-delete { background: #ef4444; }
+    .btn-delete:hover { background: #dc2626; }
+    .no-data { text-align: center; padding: 60px 20px; color: #64748b; font-size: 1.1rem; font-style: italic; }
+    .messages { margin-bottom: 24px; }
+    .alert-success { background: #d1fae5; color: #065f46; padding: 14px; border-radius: 8px; border: 1px solid #a7f3d0; }
+</style>
+
+<div class="wrapper">
+
+    <div class="page-header">
+        <h2>My Spare Parts Inventory</h2>
+        <a href="/myapp/addsparepart_get/" class="btn-add">+ Add New Spare Part</a>
+    </div>
+
+    <div class="messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="table-card">
+        {% if data %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><strong>{{ i.date }}</strong></td>
+                        <td>₹ {{ i.amount }}</td>
+                      <td>
+    {% if i.status == "paid" %}
+        <span style="color:green;font-weight:600">Paid</span>
+    {% else %}
+        <span style="color:orange;font-weight:600">Pending</span>
+    {% endif %}
+</td>
+
+<td>{{ i.CUSTOMER.name }}</td>
+
+<td>
+    {% for item in i.items.all %}
+        {{ item.SPAREPART.part_name }} (x{{ item.quantity }})<br>
+    {% endfor %}
+</td>
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-data">No orders added yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

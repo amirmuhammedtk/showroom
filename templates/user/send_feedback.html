@@ -1,0 +1,20 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<div class="container mt-5">
+<div class="card shadow p-4">
+<h3 class="text-center mb-4">Send Feedback</h3>
+
+<form method="post" action="/myapp/send_feedback_post/">
+{% csrf_token %}
+
+<label>Your Message</label>
+<textarea name="message" class="form-control mb-3" required></textarea>
+
+<button class="btn btn-primary w-100">Submit</button>
+
+</form>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+.pay-box{
+    max-width:500px;margin:100px auto;padding:40px;background:white;
+    border-radius:18px;text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,.1)
+}
+.amount{font-size:32px;font-weight:700;color:#1d4ed8;margin:15px 0}
+.pay-btn{
+    background:linear-gradient(135deg,#2563eb,#1e40af);
+    color:white;border:none;padding:14px 35px;border-radius:12px;
+    font-size:18px;font-weight:600;cursor:pointer
+}
+</style>
+
+<div class="pay-box">
+<h2>Confirm Payment</h2>
+<div class="amount">₹ {{amount|floatformat:2}}</div>
+
+<button id="rzp-button1" class="pay-btn">Pay Now</button>
+
+<form id="successForm" method="POST" action="/myapp/payment_success/">
+    {% csrf_token %}
+    <input type="hidden" name="order_id" value="{{id}}">
+    <input type="hidden" name="payment_id" id="payment_id">
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "{{razorpay_api_key}}",
+    "amount": "{{amount}}",
+    "currency": "{{currency}}",
+    "name": "Spare Parts Shop",
+    "description": "Order Payment",
+    "handler": function (response){
+
+        // VERY IMPORTANT PART
+        document.getElementById('payment_id').value = response.razorpay_payment_id;
+
+        // submit to Django
+        document.getElementById('successForm').submit();
+    },
+
+    "theme": {
+        "color": "#16a34a"
+    }
+};
+
+var rzp1 = new Razorpay(options);
+
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+{% endblock %}

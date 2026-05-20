@@ -1,0 +1,125 @@
+{% extends 'ServiceCenter/servicecenterhome.html' %}
+{% block body %}
+
+<style>
+    body { background: #f5f7fa; font-family: 'Segoe UI', sans-serif; color: #2d3748; }
+    .wrapper { padding: 40px 20px; max-width: 1400px; margin: 0 auto; }
+    .page-header {
+        background: white;
+        padding: 24px 32px;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        margin-bottom: 32px;
+    }
+    .page-header h2 { font-size: 2rem; font-weight: 700; color: #1a365d; margin: 0; }
+
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        padding: 32px;
+        overflow-x: auto;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 16px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #1e293b; color: white; font-weight: 600; font-size: 0.85rem; }
+    tr:hover { background: #f8fafc; }
+
+    .action-btn {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        color: white;
+        margin-right: 6px;
+        display: inline-block;
+    }
+
+    .btn-update { background: #3b82f6; }
+    .btn-update:hover { background: #2563eb; }
+
+    .btn-bill { background: #10b981; }
+    .btn-bill:hover { background: #059669; }
+
+    .btn-view { background: #6366f1; }
+    .btn-view:hover { background: #4f46e5; }
+
+    .no-data {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+        font-size: 1.1rem;
+        font-style: italic;
+    }
+</style>
+
+<div class="wrapper">
+
+    <div class="page-header">
+        <h2>Service Bookings</h2>
+    </div>
+
+    <div class="table-card">
+        {% if data %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Issue</th>
+                        <th>Vehicle</th>
+                        <th>Customer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.service_date }}</td>
+                        <td>{{ i.status }}</td>
+                        <td>{{ i.issue }}</td>
+                        <td>{{ i.vehicle_model }}</td>
+                        <td>{{ i.CUSTOMER.name }}</td>
+
+
+   <td>
+
+{% if i.status == 'booked' %}
+    <a href="/myapp/update_service/{{ i.id }}/" class="action-btn btn-update">
+        Update
+    </a>
+{% endif %}
+
+{% if i.status == 'finished' and not i.has_bill %}
+    <a href="/myapp/generate_bill/{{ i.id }}/" class="action-btn btn-bill">
+        Generate Bill
+    </a>
+{% endif %}
+
+{% if i.has_bill %}
+    <a href="/myapp/view_bill/{{ i.id }}/" class="action-btn btn-view">
+        View Bill
+    </a>
+{% endif %}
+
+</td>
+
+
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-data">No Service Bookings Yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

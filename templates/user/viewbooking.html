@@ -1,0 +1,115 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<style>
+    body{
+        background:#f4f7fb;
+        font-family:Segoe UI, system-ui;
+    }
+
+    .container-box{
+        max-width:1100px;
+        margin:40px auto;
+        background:white;
+        padding:30px;
+        border-radius:14px;
+        box-shadow:0 10px 35px rgba(0,0,0,0.08);
+    }
+
+    h2{
+        text-align:center;
+        font-weight:700;
+        color:#1e3a5f;
+        margin-bottom:25px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+    }
+
+    th{
+        background:#2563eb;
+        color:white;
+        padding:14px;
+        font-size:15px;
+        text-align:center;
+    }
+
+    td{
+        padding:14px;
+        text-align:center;
+        border-bottom:1px solid #e5e7eb;
+        font-size:15px;
+    }
+
+    tr:hover{
+        background:#f1f5f9;
+    }
+
+    .status{
+        padding:6px 14px;
+        border-radius:20px;
+        font-weight:600;
+        font-size:14px;
+        display:inline-block;
+    }
+
+    .pending{background:#fef3c7;color:#92400e;}
+    .approved{background:#d1fae5;color:#065f46;}
+    .delivered{background:#dbeafe;color:#1e40af;}
+    .cancelled{background:#fee2e2;color:#991b1b;}
+
+    .empty{
+        text-align:center;
+        padding:40px;
+        color:#64748b;
+        font-size:18px;
+    }
+</style>
+
+<div class="container-box">
+
+    <h2>My Vehicle Bookings</h2>
+
+    {% if data %}
+    <table>
+        <tr>
+            <th>Vehicle</th>
+            <th>Variant</th>
+            <th>Showroom</th>
+            <th>District</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for i in data %}
+        <tr>
+            <td>{{ i.VARIENT.MODEL.model_name }}</td>
+            <td>{{ i.VARIENT.variant_name }}</td>
+            <td>{{ i.SHOWROOM.name }}</td>
+            <td>{{ i.SHOWROOM.district }}</td>
+            <td>{{ i.date }}</td>
+            <td>
+                <span class="status 
+                    {% if i.status == 'pending' %}pending
+                    {% elif i.status == 'approved' %}approved
+                    {% elif i.status == 'delivered' %}delivered
+                    {% else %}cancelled
+                    {% endif %}">
+                    {{ i.status|title }}
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% else %}
+        <div class="empty">
+            You have not booked any vehicles yet 🚗
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

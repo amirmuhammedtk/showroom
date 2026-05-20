@@ -1,0 +1,437 @@
+{% extends 'showroom/showroomhome.html' %}
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        padding: 40px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .card-form {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        padding: 40px 45px;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+    .title h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a365d;
+    }
+
+    .title p {
+        color: #64748b;
+        font-size: 1rem;
+    }
+
+    .current-photos {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+
+    .photo-box {
+        flex: 1;
+        min-width: 280px;
+        text-align: center;
+    }
+
+    .photo-box h4 {
+        margin-bottom: 12px;
+        color: #1e293b;
+        font-size: 1.1rem;
+    }
+
+    .photo-preview {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 3px solid #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        margin: 0 auto;
+    }
+
+    .no-photo {
+        width: 180px;
+        height: 180px;
+        background: #e2e8f0;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #64748b;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 26px;
+        position: relative;
+    }
+
+    label {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .required {
+        color: #ef4444;
+        margin-left: 4px;
+    }
+
+    .input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        outline: none;
+    }
+
+    .input.error {
+        border-color: #ef4444;
+        background: #fef2f2;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 0.82rem;
+        margin-top: 6px;
+        display: none;
+    }
+
+    .file-label {
+        display: block;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .file-label:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+
+    .file-name {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #10b981;
+        font-weight: 500;
+    }
+
+    .messages {
+        margin-bottom: 28px;
+    }
+
+    .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #a7f3d0;
+        margin-bottom: 20px;
+    }
+
+    .alert-warning {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #fde68a;
+        margin-bottom: 20px;
+    }
+
+    .btns {
+        display: flex;
+        gap: 16px;
+        margin-top: 40px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-save {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #4b5563;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .current-photos {
+            flex-direction: column;
+            align-items: center;
+        }
+        .btns {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+
+        <div class="title">
+            <h2>Edit Showroom Profile</h2>
+            <p>Update your showroom information</p>
+        </div>
+
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Current Photos Preview -->
+        <div class="current-photos">
+            <div class="photo-box">
+                <h4>Current Showroom Photo</h4>
+                {% if data.photo %}
+                    <img src="{{ data.photo }}" alt="Showroom Photo" class="photo-preview">
+                {% else %}
+                    <div class="no-photo">No Photo</div>
+                {% endif %}
+            </div>
+
+            <div class="photo-box">
+                <h4>Current License Proof</h4>
+                {% if data.license_proof %}
+                    <img src="{{ data.license_proof }}" alt="License Proof" class="photo-preview" style="object-fit: contain;">
+                {% else %}
+                    <div class="no-photo">No License</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <form method="POST" action="/myapp/showroom_editprofile/" enctype="multipart/form-data" id="editProfileForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Showroom Name <span class="required">*</span></label>
+                <input type="text" name="name" id="name" class="input" value="{{ data.name }}" required>
+                <div id="nameError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="place">Place / City <span class="required">*</span></label>
+                <input type="text" name="place" id="place" class="input" value="{{ data.place }}" required>
+                <div id="placeError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="pincode">Pincode <span class="required">*</span></label>
+                <input type="text" name="pincode" id="pincode" class="input" value="{{ data.pincode }}" required>
+                <div id="pincodeError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="district">District <span class="required">*</span></label>
+                <input type="text" name="district" id="district" class="input" value="{{ data.district }}" required>
+                <div id="districtError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="state">State <span class="required">*</span></label>
+                <input type="text" name="state" id="state" class="input" value="{{ data.state }}" required>
+                <div id="stateError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" id="phone" class="input" value="{{ data.phone }}" required>
+                <div id="phoneError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" name="email" id="email" class="input" value="{{ data.email }}" required>
+                <div id="emailError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="file-label" for="photo">
+                    Update Showroom Photo (optional – JPG/PNG)
+                </label>
+                <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" hidden>
+                <div id="photoName" class="file-name"></div>
+                <div id="photoError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="file-label" for="license">
+                    Update License Proof (optional – JPG/PNG)
+                </label>
+                <input type="file" name="license" id="license" accept="image/jpeg,image/png" hidden>
+                <div id="licenseName" class="file-name"></div>
+                <div id="licenseError" class="error-message"></div>
+            </div>
+
+            <div class="btns">
+                <button type="submit" class="btn btn-save">Save Changes</button>
+                <a href="/myapp/showroomview_profile/" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Show selected file names
+document.getElementById('photo').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    document.getElementById('photoName').textContent = file ? `Selected: ${file.name}` : '';
+});
+
+document.getElementById('license').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    document.getElementById('licenseName').textContent = file ? `Selected: ${file.name}` : '';
+});
+
+// Strict client-side validation
+document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+    let isValid = true;
+
+    // Clear previous errors
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+        el.textContent = '';
+    });
+    document.querySelectorAll('.input').forEach(el => el.classList.remove('error'));
+
+    function showError(id, message) {
+        const errEl = document.getElementById(id);
+        errEl.textContent = message;
+        errEl.style.display = 'block';
+        document.getElementById(id.replace('Error', '')).classList.add('error');
+        isValid = false;
+    }
+
+    // Showroom Name
+    const name = document.getElementById('name').value.trim();
+    if (!name || name.length < 3) {
+        showError('nameError', 'Showroom name must be at least 3 characters');
+    }
+
+    // Place
+    const place = document.getElementById('place').value.trim();
+    if (!place || place.length < 2) {
+        showError('placeError', 'Place must be at least 2 characters');
+    }
+
+    // Pincode
+    const pincode = document.getElementById('pincode').value.trim();
+    if (!/^\d{6}$/.test(pincode)) {
+        showError('pincodeError', 'Pincode must be exactly 6 digits');
+    }
+
+    // District
+    const district = document.getElementById('district').value.trim();
+    if (!district || district.length < 2) {
+        showError('districtError', 'District must be at least 2 characters');
+    }
+
+    // State
+    const state = document.getElementById('state').value.trim();
+    if (!state || state.length < 2) {
+        showError('stateError', 'State must be at least 2 characters');
+    }
+
+    // Phone
+    const phone = document.getElementById('phone').value.trim();
+    if (!/^\d{10}$/.test(phone)) {
+        showError('phoneError', 'Phone number must be exactly 10 digits');
+    }
+
+    // Email
+    const email = document.getElementById('email').value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showError('emailError', 'Please enter a valid email address');
+    }
+
+    // Photo (optional) - only validate if uploaded
+    const photo = document.getElementById('photo').files[0];
+    if (photo) {
+        const ext = photo.name.split('.').pop().toLowerCase();
+        if (!['jpg', 'jpeg', 'png'].includes(ext)) {
+            showError('photoError', 'Only JPG or PNG files allowed');
+        }
+    }
+
+    // License (optional)
+    const license = document.getElementById('license').files[0];
+    if (license) {
+        const ext = license.name.split('.').pop().toLowerCase();
+        if (!['jpg', 'jpeg', 'png'].includes(ext)) {
+            showError('licenseError', 'Only JPG or PNG files allowed');
+        }
+    }
+
+    if (!isValid) {
+        e.preventDefault();
+        // Scroll to first error
+        const firstError = document.querySelector('.error-message[style*="block"]');
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+});
+</script>
+
+{% endblock %}

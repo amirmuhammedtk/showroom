@@ -1,0 +1,420 @@
+{% extends 'admin/adminhome.html' %}
+
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    }
+
+    .card-form {
+        width: 100%;
+        max-width: 780px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 40px 45px;
+        margin: 20px auto;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+    .title h2 {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin-bottom: 8px;
+    }
+
+    .title p {
+        color: #64748b;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .current-logo-section {
+        text-align: center;
+        margin-bottom: 36px;
+        padding: 28px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .current-logo-label {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 16px;
+        display: block;
+        font-size: 1.05rem;
+    }
+
+    .current-logo-box img {
+        max-width: 240px;
+        max-height: 160px;
+        object-fit: contain;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        background: white;
+        padding: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    label {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .required {
+        color: #ef4444;
+        margin-left: 4px;
+    }
+
+    .input,
+    textarea.input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: #ffffff;
+        transition: all 0.2s ease;
+    }
+
+    .input:focus,
+    textarea.input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        outline: none;
+    }
+
+    textarea.input {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    /* File Upload */
+    .file-upload-container {
+        position: relative;
+    }
+
+    .file-box {
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        background: #f8fafc;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .file-box:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+    }
+
+    .file-box.dragover {
+        border-color: #2563eb;
+        background: #dbeafe;
+        box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.15);
+    }
+
+    .file-box p {
+        margin: 12px 0 8px;
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+    .file-box small {
+        color: #94a3b8;
+        font-size: 0.85rem;
+    }
+
+    .file-info {
+        margin-top: 12px;
+        color: #64748b;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .file-info.selected {
+        color: #10b981;
+        font-weight: 600;
+    }
+
+    .preview {
+        margin-top: 20px;
+        text-align: center;
+        display: none;
+    }
+
+    .preview img {
+        max-width: 220px;
+        max-height: 140px;
+        object-fit: contain;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        background: white;
+        padding: 6px;
+    }
+
+    .error {
+        color: #ef4444;
+        font-size: 0.82rem;
+        margin-top: 6px;
+        margin-bottom: 12px;
+        display: none;
+    }
+
+    .btns {
+        display: flex;
+        gap: 16px;
+        margin-top: 36px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-update {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-update:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .btn-update.submitting {
+        background: #1e40af;
+        cursor: not-allowed;
+        opacity: 0.9;
+    }
+
+    .btn-cancel {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #4b5563;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .card-form {
+            padding: 30px 25px;
+        }
+        .title h2 {
+            font-size: 1.8rem;
+        }
+        .btns {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+        <div class="title">
+            <h2>Edit Brand / Company</h2>
+            <p>Update information for {{ data.name }}</p>
+        </div>
+
+        <div class="current-logo-section">
+            <span class="current-logo-label">Current Brand Logo</span>
+            <div class="current-logo-box">
+                <img src="{{ data.logo }}" alt="{{ data.name }} logo">
+            </div>
+        </div>
+
+        <form method="POST" action="/myapp/edit_company_post/" enctype="multipart/form-data" id="editCompanyForm">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ data.id }}">
+
+            <div class="form-group">
+                <label for="name">Brand / Company Name <span class="required">*</span></label>
+                <input type="text" name="name" id="name" class="input"
+                       value="{{ data.name }}"
+                       placeholder="e.g. Toyota, Honda, BMW, Mahindra"
+                       required
+                       pattern="[A-Za-z0-9 .&()-]{2,60}"
+                       title="2–60 characters. Allowed: letters, numbers, space, . & - ( )">
+                <div id="nameErr" class="error">Please enter a valid brand name (2–60 characters)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description <span class="required">*</span></label>
+                <textarea name="description" id="description" class="input"
+                          placeholder="Brief description about the company, country of origin, popular models, etc..."
+                          required
+                          minlength="15"
+                          maxlength="600">{{ data.description }}</textarea>
+                <div id="descErr" class="error">Description should be between 15 and 600 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label>Update Brand Logo <small>(optional – leave empty to keep current)</small></label>
+                <div class="file-upload-container">
+                    <div class="file-box" id="dropZone">
+                        <p><strong>Click here</strong> or drag & drop new logo</p>
+                        <small>PNG or JPG only • Recommended: 512×512 or square</small>
+                    </div>
+                    <input type="file" name="logo" id="logo" accept="image/png, image/jpeg" hidden>
+                </div>
+                <div id="logoErr" class="error">Please upload a valid JPG or PNG image</div>
+
+                <div class="file-info" id="fileName"></div>
+
+                <div class="preview" id="preview">
+                    <img id="imgPreview" alt="New logo preview">
+                </div>
+            </div>
+
+            <div class="btns">
+                <button type="submit" class="btn btn-update" id="submitBtn">
+                    Update Brand
+                </button>
+                <button type="button" class="btn btn-cancel"
+                        onclick="window.location.href='/myapp/adminview_company/'">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Elements
+const logoInput      = document.getElementById('logo');
+const previewDiv     = document.getElementById('preview');
+const imgPreview     = document.getElementById('imgPreview');
+const dropZone       = document.getElementById('dropZone');
+const fileNameDisplay = document.getElementById('fileName');
+const submitBtn      = document.getElementById('submitBtn');
+
+// Validate & Preview
+function validateAndPreview(file) {
+    if (!file) return false;
+
+    const validTypes = ['image/png', 'image/jpeg'];
+
+    if (!validTypes.includes(file.type)) {
+        document.getElementById('logoErr').style.display = 'block';
+        logoInput.value = '';
+        previewDiv.style.display = 'none';
+        fileNameDisplay.textContent = '';
+        return false;
+    }
+
+    document.getElementById('logoErr').style.display = 'none';
+    imgPreview.src = URL.createObjectURL(file);
+    previewDiv.style.display = 'block';
+
+    fileNameDisplay.textContent = `Selected: ${file.name}`;
+    fileNameDisplay.classList.add('selected');
+
+    return true;
+}
+
+// Click to upload
+dropZone.addEventListener('click', () => logoInput.click());
+
+logoInput.addEventListener('change', (e) => {
+    validateAndPreview(e.target.files[0]);
+});
+
+// Drag & Drop
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+        logoInput.files = e.dataTransfer.files;
+        validateAndPreview(file);
+    }
+});
+
+// Form validation
+const form = document.getElementById('editCompanyForm');
+form.addEventListener('submit', function(e) {
+    let isValid = true;
+
+    // Name
+    const name = document.getElementById('name');
+    const nameErr = document.getElementById('nameErr');
+    if (!name.checkValidity()) {
+        nameErr.style.display = 'block';
+        isValid = false;
+    } else {
+        nameErr.style.display = 'none';
+    }
+
+    // Description
+    const desc = document.getElementById('description');
+    const descErr = document.getElementById('descErr');
+    if (desc.value.trim().length < 15 || desc.value.trim().length > 600) {
+        descErr.style.display = 'block';
+        isValid = false;
+    } else {
+        descErr.style.display = 'none';
+    }
+
+    if (!isValid) {
+        e.preventDefault();
+        return;
+    }
+
+    // Show submitting state
+    submitBtn.classList.add('submitting');
+    submitBtn.textContent = 'Updating...';
+    submitBtn.disabled = true;
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'admin/adminhome.html' %}
+{% block body %}
+
+<style>
+body{background:#ffffff;}
+.wrapper{display:flex;justify-content:center;padding:40px 0;}
+.card-form{width:650px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:35px;}
+label{font-weight:600;margin-top:10px;}
+.input{width:100%;padding:11px;border:1px solid #dcdfe6;border-radius:6px;margin-bottom:18px;}
+.btn{padding:12px;border:none;border-radius:6px;font-weight:600;width:100%;}
+.btn-save{background:#2d89ef;color:#fff;}
+.company-box{background:#f4f6f9;padding:12px;border-radius:6px;margin-bottom:18px;font-weight:600;}
+</style>
+
+<div class="wrapper">
+<div class="card-form">
+
+<h2>Add Variant</h2>
+
+<form method="POST" action="/myapp/add_variant_post/" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="company-box">
+Model : {{ model.model_name }}
+</div>
+
+<input type="hidden" name="model_id" value="{{model.id}}">
+
+<label>Variant Name</label> <input type="text" name="variant_name" class="input" required>
+
+<label>Engine CC</label> <input type="text" name="engine_cc" class="input" required>
+
+<label>Mileage</label> <input type="text" name="mileage" class="input" required>
+
+<label>Color</label> <input type="text" name="color" class="input" required>
+
+<label>Photo</label> <input type="file" name="photo" class="input" required>
+
+<button type="submit" class="btn btn-save">Save Variant</button>
+
+</form>
+</div>
+</div>
+
+{% endblock %}

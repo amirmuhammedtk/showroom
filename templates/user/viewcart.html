@@ -1,0 +1,95 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<style>
+.wrapper{max-width:1100px;margin:auto;padding:30px}
+.title{text-align:center;font-size:30px;font-weight:700;margin-bottom:25px;color:#0f172a}
+
+.cart-card{
+    background:white;border-radius:16px;padding:20px;margin-bottom:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    display:flex;justify-content:space-between;align-items:center;
+    transition:.2s
+}
+.cart-card:hover{transform:translateY(-3px)}
+
+.left h4{margin:0;color:#1e293b;font-size:20px}
+.meta{color:#64748b;font-size:14px;margin-top:4px}
+
+.price{font-weight:700;color:#1d4ed8;font-size:20px}
+
+.qty-box{
+    display:flex;align-items:center;gap:10px;margin-top:8px
+}
+
+.qty-btn{
+    background:#e2e8f0;border:none;width:32px;height:32px;
+    border-radius:8px;font-size:18px;font-weight:700;cursor:pointer
+}
+.qty-btn:hover{background:#cbd5e1}
+
+.qty-number{
+    font-weight:700;font-size:16px;width:30px;text-align:center
+}
+
+.summary{
+    background:#f1f5f9;padding:25px;border-radius:16px;margin-top:25px;text-align:right
+}
+
+.pay-btn{
+    background:linear-gradient(135deg,#16a34a,#15803d);
+    color:white;border:none;padding:14px 30px;border-radius:12px;
+    font-size:18px;font-weight:700;margin-top:12px;cursor:pointer
+}
+.pay-btn:hover{transform:scale(1.05)}
+</style>
+
+<div class="wrapper">
+<div class="title">🛒 My Cart</div>
+
+{% if data %}
+
+{% for i in data %}
+<div class="cart-card">
+
+<div class="left">
+<h4>{{i.SPAREPART.part_name}}</h4>
+<div class="meta">{{i.SPAREPART.SERVICECENTER.name}}</div>
+
+<div class="qty-box">
+<a href="/myapp/decrease_qty/{{i.id}}/">
+<button class="qty-btn">−</button>
+</a>
+
+<div class="qty-number">{{i.quantity}}</div>
+
+<a href="/myapp/increase_qty/{{i.id}}/">
+<button class="qty-btn">+</button>
+</a>
+</div>
+
+</div>
+
+<div class="price">
+₹ {{i.SPAREPART.price}} × {{i.quantity}}
+</div>
+
+</div>
+{% endfor %}
+
+<div class="summary">
+<h2>Total Amount : ₹ {{total}}</h2>
+
+<form action="/myapp/placeorder/" method="post">
+{% csrf_token %}
+<button class="pay-btn">Proceed to Payment</button>
+</form>
+
+</div>
+
+{% else %}
+<h3 style="text-align:center;color:#64748b">Cart is empty</h3>
+{% endif %}
+
+</div>
+{% endblock %}

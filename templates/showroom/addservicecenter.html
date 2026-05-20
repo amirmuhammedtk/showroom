@@ -1,0 +1,342 @@
+{% extends 'showroom/showroomhome.html' %}
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        padding: 40px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .card-form {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        padding: 40px 45px;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+    .title h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a365d;
+    }
+
+    .title p {
+        color: #64748b;
+        font-size: 1rem;
+    }
+
+    .messages {
+        margin-bottom: 28px;
+    }
+
+    .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #a7f3d0;
+    }
+
+    .alert-warning {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #fde68a;
+    }
+
+    .form-group {
+        margin-bottom: 26px;
+        position: relative;
+    }
+
+    label {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .required {
+        color: #ef4444;
+        margin-left: 4px;
+    }
+
+    .input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        outline: none;
+    }
+
+    .input.error {
+        border-color: #ef4444;
+        background: #fef2f2;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 0.82rem;
+        margin-top: 6px;
+        display: none;
+    }
+
+    .file-label {
+        display: block;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .file-label:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+
+    .file-name {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #10b981;
+        font-weight: 500;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-top: 12px;
+    }
+
+    .btn:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .cancel-btn {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .cancel-btn:hover {
+        color: #2563eb;
+    }
+
+    @media (max-width: 576px) {
+        .card-form {
+            padding: 30px 25px;
+        }
+    }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+
+        <div class="title">
+            <h2>Add New Service Center</h2>
+            <p>Create a service center under your showroom</p>
+        </div>
+
+        <!-- Show Django messages -->
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form method="POST" action="/myapp/showroom_add_servicecenter/" enctype="multipart/form-data" id="addServiceCenterForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Service Center Name <span class="required">*</span></label>
+                <input type="text" name="name" id="name" class="input" required placeholder="Enter service center name">
+                <div id="nameError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="place">Place / City <span class="required">*</span></label>
+                <input type="text" name="place" id="place" class="input" required placeholder="e.g. Ernakulam">
+                <div id="placeError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="pincode">Pincode <span class="required">*</span></label>
+                <input type="text" name="pincode" id="pincode" class="input" required placeholder="e.g. 682018">
+                <div id="pincodeError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="district">District <span class="required">*</span></label>
+                <input type="text" name="district" id="district" class="input" required placeholder="e.g. Ernakulam">
+                <div id="districtError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="state">State <span class="required">*</span></label>
+                <input type="text" name="state" id="state" class="input" required placeholder="e.g. Kerala">
+                <div id="stateError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" id="phone" class="input" required placeholder="e.g. 9876543210">
+                <div id="phoneError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" name="email" id="email" class="input" required placeholder="example@servicecenter.com">
+                <div id="emailError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="file-label" for="photo">
+                    Upload Service Center Photo (JPG/PNG only) <span class="required">*</span>
+                </label>
+                <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" required hidden>
+                <div id="photoName" class="file-name"></div>
+                <div id="photoError" class="error-message"></div>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Add Service Center</button>
+
+            <a href="/myapp/showroomview_profile/" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
+</div>
+
+<script>
+// Show selected file name
+document.getElementById('photo').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    document.getElementById('photoName').textContent = file ? `Selected: ${file.name}` : '';
+});
+
+// Strict client-side validation
+document.getElementById('addServiceCenterForm').addEventListener('submit', function(e) {
+    let isValid = true;
+
+    // Clear previous errors
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+        el.textContent = '';
+    });
+    document.querySelectorAll('.input').forEach(el => el.classList.remove('error'));
+
+    function showError(id, message) {
+        const errEl = document.getElementById(id);
+        errEl.textContent = message;
+        errEl.style.display = 'block';
+        document.getElementById(id.replace('Error', '')).classList.add('error');
+        isValid = false;
+    }
+
+    // Name
+    const name = document.getElementById('name').value.trim();
+    if (!name || name.length < 3) {
+        showError('nameError', 'Service center name must be at least 3 characters');
+    } else if (!/^[A-Za-z0-9\s&-]+$/.test(name)) {
+        showError('nameError', 'Only letters, numbers, spaces, & and - allowed');
+    }
+
+    // Place
+    const place = document.getElementById('place').value.trim();
+    if (!place || place.length < 2) {
+        showError('placeError', 'Place must be at least 2 characters');
+    }
+
+    // Pincode
+    const pincode = document.getElementById('pincode').value.trim();
+    if (!/^\d{6}$/.test(pincode)) {
+        showError('pincodeError', 'Pincode must be exactly 6 digits');
+    }
+
+    // District
+    const district = document.getElementById('district').value.trim();
+    if (!district || district.length < 2) {
+        showError('districtError', 'District must be at least 2 characters');
+    }
+
+    // State
+    const state = document.getElementById('state').value.trim();
+    if (!state || state.length < 2) {
+        showError('stateError', 'State must be at least 2 characters');
+    }
+
+    // Phone
+    const phone = document.getElementById('phone').value.trim();
+    if (!/^\d{10}$/.test(phone)) {
+        showError('phoneError', 'Phone number must be exactly 10 digits');
+    }
+
+    // Email
+    const email = document.getElementById('email').value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showError('emailError', 'Please enter a valid email address');
+    }
+
+    // Photo - required + format
+    const photo = document.getElementById('photo').files[0];
+    if (!photo) {
+        showError('photoError', 'Please upload a photo of the service center');
+    } else {
+        const ext = photo.name.split('.').pop().toLowerCase();
+        if (!['jpg', 'jpeg', 'png'].includes(ext)) {
+            showError('photoError', 'Only JPG or PNG files are allowed');
+        }
+    }
+
+    if (!isValid) {
+        e.preventDefault();
+        // Scroll to first error
+        const firstError = document.querySelector('.error-message[style*="block"]');
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h3 class="text-center mb-4">Book Vehicle Service</h3>
+
+        <form method="post" action="/myapp/book_service_post/">
+            {% csrf_token %}
+
+            <input type="hidden" name="center" value="{{center.id}}">
+
+            <div class="mb-3">
+                <label>Vehicle Model</label>
+                <input type="text" name="model" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Problem / Issue</label>
+                <textarea name="issue" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Preferred Date</label>
+                <input type="date" name="date" class="form-control" required>
+            </div>
+
+            <button class="btn btn-primary w-100">Book Service</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

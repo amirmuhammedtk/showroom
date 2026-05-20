@@ -1,0 +1,95 @@
+{% extends 'showroom/showroomhome.html' %}
+{% block body %}
+
+<style>
+    body { background: #f5f7fa; font-family: 'Segoe UI', sans-serif; color: #2d3748; }
+    .wrapper { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+    .page-header {
+        background: white;
+        padding: 24px 32px;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        margin-bottom: 32px;
+        text-align: center;
+    }
+    .page-header h2 { font-size: 2rem; font-weight: 700; color: #1a365d; margin: 0 0 12px 0; }
+    .variant-info { background: #f8fafc; padding: 20px; border-radius: 10px; margin-bottom: 32px; border: 1px solid #e2e8f0; text-align: center; }
+    .price-card {
+        background: white;
+        border-radius: 12px;
+        padding: 28px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        text-align: center;
+        max-width: 500px;
+        margin: 0 auto 40px;
+    }
+    .price-amount {
+        font-size: 3.2rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin: 16px 0;
+    }
+    .price-label { color: #64748b; font-size: 1.1rem; }
+    .action-btns { display: flex; gap: 16px; justify-content: center; }
+    .btn { padding: 12px 28px; border-radius: 10px; font-weight: 600; text-decoration: none; color: white; transition: all 0.2s ease; }
+    .btn-edit { background: #10b981; }
+    .btn-edit:hover { background: #059669; transform: translateY(-1px); }
+    .btn-delete { background: #ef4444; }
+    .btn-delete:hover { background: #dc2626; transform: translateY(-1px); }
+    .no-price { text-align: center; color: #64748b; font-size: 1.2rem; padding: 60px 0; font-style: italic; }
+    .messages { margin-bottom: 24px; }
+    .alert-success { background: #d1fae5; color: #065f46; padding: 14px; border-radius: 8px; border: 1px solid #a7f3d0; }
+</style>
+
+<div class="wrapper">
+
+    <div class="page-header">
+        <h2>Pricing for Variant</h2>
+    </div>
+
+    <div class="messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="variant-info">
+        <h4>Variant Details</h4>
+        {% if data.first %}
+            <p><strong>Model:</strong> {{ data.first.VARIENT.MODEL.model_name }}</p>
+            <p><strong>Company:</strong> {{ data.first.VARIENT.MODEL.COMPANY.name }}</p>
+            <p><strong>Variant:</strong> {{ data.first.VARIENT.variant_name }}</p>
+        {% else %}
+            <p>No price set yet for this variant</p>
+        {% endif %}
+    </div>
+
+    {% if data %}
+        {% for price in data %}
+        <div class="price-card">
+            <div class="price-label">Selling Price in Your Showroom</div>
+            <div class="price-amount">₹ {{ price.price }}</div>
+            <div class=""> {{ price.VARIENT.variant_name }}</div>
+            <div class=""> {{ price.VARIENT.MODEL.model_name }}</div>
+
+            <div class="action-btns">
+                <a href="/myapp/editprice_get/{{ price.id }}" class="btn btn-edit">Edit Price</a>
+                <a href="/myapp/deleteprice/{{ price.id }}"
+                   class="btn btn-delete"
+                   onclick="return confirm('Are you sure you want to delete this price entry?');">
+                   Delete Price
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-price">No price has been set for this variant yet.<br>
+            <a href="/myapp/addprice_get/{{ variant_id }}" style="color:#2563eb; font-weight:600;">Set price now →</a>
+        </p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

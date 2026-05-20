@@ -1,0 +1,713 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>User Registration - E-Showroom</title>#}
+{#    <style>#}
+{#        * { margin:0; padding:0; box-sizing:border-box; }#}
+{#        body {#}
+{#            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;#}
+{#            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);#}
+{#            min-height: 100vh;#}
+{#            display: flex;#}
+{#            justify-content: center;#}
+{#            align-items: center;#}
+{#            padding: 20px;#}
+{#        }#}
+{#        .container {#}
+{#            width: 100%;#}
+{#            max-width: 580px;#}
+{#            background: white;#}
+{#            border-radius: 16px;#}
+{#            box-shadow: 0 10px 40px rgba(0,0,0,0.12);#}
+{#            overflow: hidden;#}
+{#        }#}
+{#        .header {#}
+{#            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);#}
+{#            color: white;#}
+{#            padding: 50px 40px 40px;#}
+{#            text-align: center;#}
+{#        }#}
+{#        .header h1 {#}
+{#            font-size: 2.2rem;#}
+{#            margin-bottom: 10px;#}
+{#            font-weight: 700;#}
+{#        }#}
+{#        .header p {#}
+{#            font-size: 1.05rem;#}
+{#            opacity: 0.95;#}
+{#        }#}
+{#        .form-wrapper {#}
+{#            padding: 40px 45px 50px;#}
+{#        }#}
+{#        .messages {#}
+{#            margin-bottom: 24px;#}
+{#        }#}
+{#        .alert-warning {#}
+{#            background: #fff3cd;#}
+{#            color: #856404;#}
+{#            padding: 14px 18px;#}
+{#            border-radius: 8px;#}
+{#            border: 1px solid #ffeeba;#}
+{#            text-align: center;#}
+{#            font-weight: 500;#}
+{#        }#}
+{#        .form-group {#}
+{#            margin-bottom: 24px;#}
+{#        }#}
+{#        label {#}
+{#            display: block;#}
+{#            margin-bottom: 8px;#}
+{#            font-weight: 600;#}
+{#            color: #1e293b;#}
+{#            font-size: 0.98rem;#}
+{#        }#}
+{#        .required { color: #ef4444; margin-left: 4px; }#}
+{#        .input {#}
+{#            width: 100%;#}
+{#            padding: 13px 16px;#}
+{#            border: 1px solid #cbd5e1;#}
+{#            border-radius: 8px;#}
+{#            font-size: 1rem;#}
+{#            transition: border-color 0.2s;#}
+{#        }#}
+{#        .input:focus {#}
+{#            border-color: #3b82f6;#}
+{#            outline: none;#}
+{#            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);#}
+{#        }#}
+{#        .file-label {#}
+{#            display: block;#}
+{#            padding: 14px 16px;#}
+{#            background: #f8fafc;#}
+{#            border: 2px dashed #cbd5e1;#}
+{#            border-radius: 8px;#}
+{#            text-align: center;#}
+{#            cursor: pointer;#}
+{#            transition: all 0.2s;#}
+{#            color: #64748b;#}
+{#            font-weight: 500;#}
+{#        }#}
+{#        .file-label:hover {#}
+{#            border-color: #3b82f6;#}
+{#            background: #eff6ff;#}
+{#        }#}
+{#        .file-name {#}
+{#            margin-top: 8px;#}
+{#            font-size: 0.92rem;#}
+{#            color: #10b981;#}
+{#            font-weight: 500;#}
+{#        }#}
+{#        .btn {#}
+{#            width: 100%;#}
+{#            padding: 14px;#}
+{#            background: #2563eb;#}
+{#            color: white;#}
+{#            border: none;#}
+{#            border-radius: 10px;#}
+{#            font-size: 1.05rem;#}
+{#            font-weight: 600;#}
+{#            cursor: pointer;#}
+{#            transition: all 0.2s;#}
+{#            margin-top: 12px;#}
+{#        }#}
+{#        .btn:hover {#}
+{#            background: #1d4ed8;#}
+{#            transform: translateY(-1px);#}
+{#        }#}
+{#        .login-link {#}
+{#            text-align: center;#}
+{#            margin-top: 28px;#}
+{#            color: #64748b;#}
+{#            font-size: 0.97rem;#}
+{#        }#}
+{#        .login-link a {#}
+{#            color: #2563eb;#}
+{#            font-weight: 600;#}
+{#            text-decoration: none;#}
+{#        }#}
+{#        .login-link a:hover {#}
+{#            text-decoration: underline;#}
+{#        }#}
+{#        @media (max-width: 576px) {#}
+{#            .form-wrapper { padding: 32px 28px; }#}
+{#            .header h1 { font-size: 1.9rem; }#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#<div class="container">#}
+{#    <div class="header">#}
+{#        <h1>User Registration</h1>#}
+{#        <p>Create your account to book vehicles & services</p>#}
+{#    </div>#}
+{##}
+{#    <div class="form-wrapper">#}
+{##}
+{#        {% if messages %}#}
+{#            {% for message in messages %}#}
+{#                <div class="alert-warning">{{ message }}</div>#}
+{#            {% endfor %}#}
+{#        {% endif %}#}
+{##}
+{#        <form method="POST" action="/myapp/usersignup_post/" enctype="multipart/form-data" id="signupForm">#}
+{#            {% csrf_token %}#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="name">Full Name <span class="required">*</span></label>#}
+{#                <input type="text" name="name" id="name" class="input" required placeholder="Enter your full name">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="email">Email Address <span class="required">*</span></label>#}
+{#                <input type="email" name="email" id="email" class="input" required placeholder="example@gmail.com">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="password">Password <span class="required">*</span></label>#}
+{#                <input type="password" name="password" id="password" class="input" required minlength="8" placeholder="Minimum 8 characters">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="phone">Phone Number <span class="required">*</span></label>#}
+{#                <input type="tel" name="phone" id="phone" class="input" required pattern="[0-9]{10}" placeholder="10 digit mobile number">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="place">Place / City <span class="required">*</span></label>#}
+{#                <input type="text" name="place" id="place" class="input" required placeholder="e.g. Kochi">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="pincode">Pincode <span class="required">*</span></label>#}
+{#                <input type="text" name="pincode" id="pincode" class="input" required pattern="[0-9]{6}" placeholder="e.g. 682018">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="district">District <span class="required">*</span></label>#}
+{#                <input type="text" name="district" id="district" class="input" required placeholder="e.g. Ernakulam">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label for="state">State <span class="required">*</span></label>#}
+{#                <input type="text" name="state" id="state" class="input" required placeholder="e.g. Kerala">#}
+{#            </div>#}
+{##}
+{#            <div class="form-group">#}
+{#                <label class="file-label" for="photo">#}
+{#                    Upload Profile Photo (optional – JPG/PNG)#}
+{#                </label>#}
+{#                <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" hidden>#}
+{#                <div id="photoName" style="margin-top:8px; font-size:0.9rem; color:#10b981;"></div>#}
+{#            </div>#}
+{##}
+{#            <button type="submit" class="btn">Register</button>#}
+{##}
+{#            <div class="login-link">#}
+{#                Already have an account? <a href="/myapp/login_get/">Login here</a>#}
+{#            </div>#}
+{#        </form>#}
+{#    </div>#}
+{#</div>#}
+{##}
+{#<script>#}
+{#    // Show selected file name#}
+{#    document.getElementById('photo').addEventListener('change', function(e) {#}
+{#        const file = e.target.files[0];#}
+{#        document.getElementById('photoName').textContent = file ? `Selected: ${file.name}` : '';#}
+{#    });#}
+{#</script>#}
+{##}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration - E-Showroom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        :root {
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.12);
+            --accent: #60efff;
+            --accent2: #a78bfa;
+            --text: #f0f0ff;
+            --text-muted: rgba(240,240,255,0.45);
+            --error: #ff6b8a;
+            --input-bg: rgba(255,255,255,0.06);
+            --input-border: rgba(255,255,255,0.11);
+            --success: #34d399;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            background: #080818;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background */
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.5;
+            animation: drift 14s ease-in-out infinite alternate;
+        }
+
+        .orb1 {
+            width: 550px; height: 550px;
+            background: radial-gradient(circle, #6d28d9, transparent 70%);
+            top: -150px; left: -120px;
+        }
+        .orb2 {
+            width: 420px; height: 420px;
+            background: radial-gradient(circle, #0ea5e9, transparent 70%);
+            bottom: -100px; right: -100px;
+            animation-delay: -5s;
+        }
+        .orb3 {
+            width: 320px; height: 320px;
+            background: radial-gradient(circle, #ec4899, transparent 70%);
+            top: 40%; left: 55%;
+            opacity: 0.2;
+            animation-delay: -9s;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0,0) scale(1); }
+            100% { transform: translate(35px,25px) scale(1.08); }
+        }
+
+        .bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Card */
+        .card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 620px;
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.04) inset,
+                0 40px 80px rgba(0,0,0,0.55),
+                0 0 120px rgba(109,40,217,0.12);
+            animation: cardIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(28px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Header */
+        .card-header {
+            padding: 44px 52px 36px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            text-align: center;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, rgba(109,40,217,0.22) 0%, rgba(14,165,233,0.08) 100%);
+            z-index: -1;
+        }
+
+        .header-icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 16px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+
+        .card-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+        }
+
+        .card-header h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* Form body */
+        .form-body {
+            padding: 40px 52px 52px;
+        }
+
+        /* Messages */
+        .messages { margin-bottom: 24px; }
+
+        .alert-warning {
+            padding: 12px 16px;
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.22);
+            border-radius: 12px;
+            color: #fbbf24;
+            font-size: 0.88rem;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        /* Section dividers */
+        .section-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+            margin-top: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.07);
+        }
+
+        /* Two column grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 9px;
+        }
+
+        .required {
+            color: var(--error);
+            margin-left: 3px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 13px 16px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            outline: none;
+            transition: all 0.25s ease;
+            caret-color: var(--accent);
+        }
+
+        .input::placeholder {
+            color: rgba(240,240,255,0.18);
+        }
+
+        .input:focus {
+            background: rgba(255,255,255,0.09);
+            border-color: rgba(96,239,255,0.38);
+            box-shadow: 0 0 0 3px rgba(96,239,255,0.07), inset 0 0 16px rgba(96,239,255,0.025);
+        }
+
+        /* File upload */
+        .file-upload-area {
+            position: relative;
+        }
+
+        .file-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 22px 20px;
+            background: var(--input-bg);
+            border: 1px dashed rgba(255,255,255,0.18);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .file-label:hover {
+            background: rgba(255,255,255,0.09);
+            border-color: rgba(96,239,255,0.4);
+            box-shadow: 0 0 0 3px rgba(96,239,255,0.07);
+        }
+
+        .file-icon {
+            font-size: 28px;
+            opacity: 0.6;
+        }
+
+        .file-label-text {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .file-label-sub {
+            font-size: 0.78rem;
+            color: rgba(240,240,255,0.28);
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.84rem;
+            color: var(--success);
+            font-weight: 500;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        /* Submit btn */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #7c3aed, #0ea5e9);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.14), transparent 60%);
+            pointer-events: none;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(124,58,237,0.42);
+        }
+
+        .btn:hover::after { left: 150%; }
+        .btn:active { transform: translateY(0); }
+
+        /* Footer */
+        .login-link {
+            text-align: center;
+            margin-top: 26px;
+            font-size: 0.87rem;
+            color: var(--text-muted);
+        }
+
+        .login-link a {
+            color: rgba(167,139,250,0.85);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover { color: var(--accent2); }
+
+        /* Responsive */
+        @media (max-width: 560px) {
+            .card-header, .form-body { padding-left: 28px; padding-right: 28px; }
+            .grid-2 { grid-template-columns: 1fr; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background -->
+    <div class="bg">
+        <div class="bg-orb orb1"></div>
+        <div class="bg-orb orb2"></div>
+        <div class="bg-orb orb3"></div>
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+            <span class="header-icon">🧑‍💼</span>
+            <h1>User <span>Registration</span></h1>
+            <p>Create your account to book vehicles &amp; services</p>
+        </div>
+
+        <div class="form-body">
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert-warning">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="/myapp/usersignup_post/" enctype="multipart/form-data" id="signupForm">
+                {% csrf_token %}
+
+                <div class="section-label">Personal Info</div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="name">Full Name <span class="required">*</span></label>
+                        <input type="text" name="name" id="name" class="input" required placeholder="Your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email <span class="required">*</span></label>
+                        <input type="email" name="email" id="email" class="input" required placeholder="example@gmail.com">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <input type="password" name="password" id="password" class="input" required minlength="8" placeholder="Min. 8 characters">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone <span class="required">*</span></label>
+                        <input type="tel" name="phone" id="phone" class="input" required pattern="[0-9]{10}" placeholder="10-digit number">
+                    </div>
+                </div>
+
+                <div class="section-label">Address Details</div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="place">Place / City <span class="required">*</span></label>
+                        <input type="text" name="place" id="place" class="input" required placeholder="e.g. Kochi">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pincode">Pincode <span class="required">*</span></label>
+                        <input type="text" name="pincode" id="pincode" class="input" required pattern="[0-9]{6}" placeholder="e.g. 682018">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="district">District <span class="required">*</span></label>
+                        <input type="text" name="district" id="district" class="input" required placeholder="e.g. Ernakulam">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">State <span class="required">*</span></label>
+                        <input type="text" name="state" id="state" class="input" required placeholder="e.g. Kerala">
+                    </div>
+                </div>
+
+                <div class="section-label">Profile Photo</div>
+
+                <div class="form-group">
+                    <div class="file-upload-area">
+                        <label class="file-label" for="photo">
+                            <span class="file-icon">📷</span>
+                            <span class="file-label-text">Click to upload profile photo</span>
+                            <span class="file-label-sub">JPG or PNG — optional</span>
+                        </label>
+                        <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" hidden>
+                        <div id="photoName" class="file-name"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Create Account →</button>
+
+                <div class="login-link">
+                    Already have an account? <a href="/myapp/login_get/">Sign in here</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('photo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            document.getElementById('photoName').textContent = file ? `✓ ${file.name}` : '';
+        });
+    </script>
+
+</body>
+</html>

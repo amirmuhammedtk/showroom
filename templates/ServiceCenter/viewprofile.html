@@ -1,0 +1,240 @@
+{% extends 'ServiceCenter/servicecenterhome.html' %}
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+        min-height: 100vh;
+    }
+
+    .wrapper {
+        padding: 40px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: white;
+        padding: 50px 40px 40px;
+        text-align: center;
+        position: relative;
+    }
+
+    .profile-photo-container {
+        width: 140px;
+        height: 140px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 6px solid rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        background: #e2e8f0;
+    }
+
+    .profile-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-name {
+        font-size: 2.1rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .profile-status {
+        display: inline-block;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-top: 8px;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-approved {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .profile-body {
+        padding: 40px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 20px 30px;
+        margin-bottom: 32px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 1rem;
+    }
+
+    .info-value {
+        color: #475569;
+        line-height: 1.5;
+    }
+
+    .info-value strong {
+        color: #1e293b;
+    }
+
+    .license-section {
+        margin-top: 40px;
+        padding-top: 32px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .license-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin-bottom: 20px;
+    }
+
+    .license-img {
+        max-width: 100%;
+        max-height: 320px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        display: block;
+        margin: 0 auto;
+    }
+
+    .no-license {
+        color: #64748b;
+        font-style: italic;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 16px;
+        margin-top: 40px;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+    }
+
+    .btn-edit {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #059669;
+        transform: translateY(-1px);
+    }
+
+    .btn-change-password {
+        background: #8b5cf6;
+        color: white;
+    }
+
+    .btn-change-password:hover {
+        background: #7c3aed;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .profile-header {
+            padding: 40px 25px 30px;
+        }
+        .action-btns {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="wrapper">
+
+    <div class="profile-card">
+
+        <div class="profile-header">
+            {% if data.photo %}
+                <div class="profile-photo-container">
+                    <img src="{{ data.photo }}" alt="{{ data.name }}" class="profile-photo">
+                </div>
+            {% else %}
+                <div class="profile-photo-container">
+                    <div style="width:100%; height:100%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:3rem; color:#64748b;">
+                        {{ data.name|slice:":1"|upper }}
+                    </div>
+                </div>
+            {% endif %}
+
+            <h1 class="profile-name">{{ data.name }}</h1>
+
+
+        </div>
+
+        <div class="profile-body">
+
+            <div class="info-grid">
+                <div class="info-label">Service Center Name:</div>
+                <div class="info-value"><strong>{{ data.name }}</strong></div>
+
+                <div class="info-label">Place / City:</div>
+                <div class="info-value">{{ data.place }}</div>
+
+                <div class="info-label">District:</div>
+                <div class="info-value">{{ data.district }}</div>
+
+                <div class="info-label">State:</div>
+                <div class="info-value">{{ data.state }}</div>
+
+                <div class="info-label">Pincode:</div>
+                <div class="info-value">{{ data.pincode }}</div>
+
+                <div class="info-label">Phone:</div>
+                <div class="info-value">{{ data.phone }}</div>
+
+                <div class="info-label">Email:</div>
+                <div class="info-value">{{ data.email }}</div>
+                 <div class="info-label">Showroom:</div>
+                <div class="info-value">{{ data.SHOWROOM.name }}</div>
+            </div>
+
+
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

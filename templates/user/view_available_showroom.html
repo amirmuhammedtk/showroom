@@ -1,0 +1,232 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        padding: 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        background: white;
+        padding: 28px 32px;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    .page-header h2 {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin: 0 0 12px 0;
+    }
+
+    .variant-info {
+        font-size: 1.1rem;
+        color: #475569;
+    }
+
+    .variant-info strong {
+        color: #1e293b;
+    }
+
+    .showroom-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 24px;
+    }
+
+    .showroom-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .showroom-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        padding: 24px 28px;
+        text-align: center;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.45rem;
+        font-weight: 700;
+    }
+
+    .card-body {
+        padding: 24px 28px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        font-size: 1rem;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #1e293b;
+        min-width: 110px;
+    }
+
+    .info-value {
+        color: #475569;
+        text-align: right;
+        flex: 1;
+    }
+
+    .price-value {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #1a365d;
+    }
+
+    .stock-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-top: 16px;
+    }
+
+    .stock-high { background: #d1fae5; color: #065f46; }
+    .stock-low { background: #fef3c7; color: #92400e; }
+
+    .no-stock {
+        text-align: center;
+        padding: 80px 20px;
+        color: #64748b;
+        font-size: 1.2rem;
+        font-style: italic;
+    }
+
+    .messages {
+        margin-bottom: 24px;
+    }
+
+    .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #a7f3d0;
+    }
+
+    @media (max-width: 768px) {
+        .showroom-grid { grid-template-columns: 1fr; }
+        .page-header h2 { font-size: 1.8rem; }
+    }
+</style>
+
+<div class="wrapper">
+
+    <div class="page-header">
+        <div>
+            <h2>Available Showrooms</h2>
+            <div class="variant-info">
+                <strong>{{ variant.MODEL.model_name }} - {{ variant.variant_name }}</strong>
+                <br>
+                {{ variant.MODEL.COMPANY.name }} • {{ variant.color }} • {{ variant.engine_cc }} cc
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if data %}
+        <div class="showroom-grid">
+            {% for showroom in data %}
+            <div class="showroom-card">
+                <div class="card-header">
+                    <h3>{{ showroom.name }}</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="info-row">
+                        <div class="info-label">Place:</div>
+                        <div class="info-value">{{ showroom.place }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">District:</div>
+                        <div class="info-value">{{ showroom.district }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Phone:</div>
+                        <div class="info-value">{{ showroom.phone }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value">{{ showroom.email }}</div>
+                    </div>
+
+                    <div style="margin-top: 20px; text-align: center;">
+                        <div class="price-value">₹ {{ showroom.price }}</div>
+                        <div class="stock-badge {% if showroom.quantity > 5 %}stock-high{% else %}stock-low{% endif %}">
+                            Stock Available: {{ showroom.quantity }}
+                        </div>
+                    </div>
+               <div style="text-align:center; margin-top:15px">
+
+    <!-- Ride Request -->
+    <a href="/myapp/send_riderequest/{{showroom.showroom_id}}/{{variant.id}}/"
+       class="btn btn-success">
+        Request Test Ride
+    </a>
+
+    <br><br>
+
+    <!-- Book Vehicle -->
+    <form method="post" action="/myapp/book_vehicle/{{showroom.showroom_id}}/{{variant.id}}/">
+        {% csrf_token %}
+        <button class="btn btn-primary">
+            Book Vehicle
+        </button>
+    </form>
+
+</div>
+
+
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-stock">
+            Sorry! No showrooms currently have this variant in stock.<br>
+            Please check back later or explore other models.
+        </p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

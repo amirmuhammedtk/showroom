@@ -1,0 +1,17 @@
+{% extends 'ServiceCenter/servicecenterhome.html' %}
+{% block body %}
+
+<div class="wrapper">
+    <div class="table-card">
+        <h2>Service Bill</h2>
+
+        <p><strong>Date:</strong> {{ bill.date }}</p>
+        <p><strong>Labor Charge:</strong> ₹ {{ bill.labor_charge }}</p>
+        <p><strong>Spare Charge:</strong> ₹ {{ bill.spare_charge }}</p>
+        <hr>
+        <h3>Total: ₹ {{ bill.total_amount }}</h3>
+        <p>Status: {{ bill.status }}</p>
+    </div>
+</div>
+
+{% endblock %}

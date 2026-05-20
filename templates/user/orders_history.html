@@ -1,0 +1,38 @@
+{% extends 'user/userhome.html' %}
+
+{% block body %}
+<h2 class="text-2xl font-bold mb-4">My Order History</h2>
+
+{% if orders %}
+    <table class="table-auto w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="border px-4 py-2">Order ID</th>
+                <th class="border px-4 py-2">Date</th>
+                <th class="border px-4 py-2">Amount</th>
+                <th class="border px-4 py-2">Status</th>
+                <th class="border px-4 py-2">Items</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr class="hover:bg-gray-100">
+                <td class="border px-4 py-2">{{ order.id }}</td>
+                <td class="border px-4 py-2">{{ order.date|date:"d M Y H:i" }}</td>
+                <td class="border px-4 py-2">{{ order.amount }}</td>
+                <td class="border px-4 py-2">{{ order.status }}</td>
+                <td class="border px-4 py-2">
+                    <ul class="list-disc ml-5">
+                    {% for item in order.items.all %}
+                        <li>{{ item.SPAREPART.part_name }} × {{ item.quantity }} @ ₹{{ item.price }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-gray-600 mt-4">You have no orders yet.</p>
+{% endif %}
+{% endblock %}

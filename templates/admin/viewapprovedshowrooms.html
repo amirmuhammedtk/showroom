@@ -1,0 +1,154 @@
+{% extends 'admin/adminhome.html' %}
+{% block body %}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+
+<style>
+    /* Same styles as above – copy-pasted for independence */
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        padding: 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        background: white;
+        padding: 24px 32px;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .page-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin: 0;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        padding: 32px;
+        overflow: hidden;
+    }
+
+    table.dataTable thead th {
+        background: #1e293b;
+        color: white !important;
+        padding: 16px 14px !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        border: none !important;
+    }
+
+    table.dataTable tbody td {
+        padding: 16px 14px !important;
+        vertical-align: middle;
+        color: #1f2937;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    table.dataTable tbody tr:hover {
+        background: #f8fafc !important;
+    }
+
+    .status-approved {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .dataTables_paginate .paginate_button.current,
+    .dataTables_paginate .paginate_button:hover {
+        background: #2563eb !important;
+        color: white !important;
+        border-color: #2563eb !important;
+    }
+
+    @media (max-width: 992px) {
+        .page-header {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="wrapper">
+
+    <div class="page-header">
+        <h2>Approved Showrooms</h2>
+    </div>
+
+    <div class="table-card">
+
+        <table id="approvedTable" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Showroom Name</th>
+                    <th>Place</th>
+                    <th>District</th>
+                    <th>State</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><strong>{{ s.name }}</strong></td>
+                    <td>{{ s.place }}</td>
+                    <td>{{ s.district }}</td>
+                    <td>{{ s.state }}</td>
+                    <td>{{ s.phone }}</td>
+                    <td>{{ s.email }}</td>
+                    <td>
+                        <span class="status-approved">Approved</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#approvedTable').DataTable({
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        order: [[0, 'asc']],
+        language: {
+            search: "Search approved showrooms:",
+            lengthMenu: "Show _MENU_ entries",
+            info: "Showing _START_ to _END_ of _TOTAL_ approved showrooms"
+        }
+    });
+});
+</script>
+
+{% endblock %}

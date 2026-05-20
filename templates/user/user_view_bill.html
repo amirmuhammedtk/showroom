@@ -1,0 +1,23 @@
+{% extends 'User/userhome.html' %}
+{% block body %}
+
+<div class="wrapper">
+    <div class="table-card">
+        <h2>Service Bill</h2>
+
+        <p>Date: {{ bill.date }}</p>
+        <p>Labor Charge: ₹ {{ bill.labor_charge }}</p>
+        <p>Spare Charge: ₹ {{ bill.spare_charge }}</p>
+        <hr>
+        <h3>Total: ₹ {{ bill.total_amount }}</h3>
+        <p>Status: {{ bill.status }}</p>
+
+        {% if bill.status == "unpaid" %}
+            <a href="/myapp/pay_bill/{{ bill.id }}/">Pay Now</a>
+        {% else %}
+            <p style="color:green;">Paid ✔</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

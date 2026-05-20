@@ -1,0 +1,228 @@
+{% extends 'ServiceCenter/servicecenterhome.html' %}
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        padding: 40px 20px;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .card-form {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        padding: 40px 45px;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+    .title h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a365d;
+    }
+
+    .title p {
+        color: #64748b;
+        font-size: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    label {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .required {
+        color: #ef4444;
+        margin-left: 4px;
+    }
+
+    .input,
+    input[type="number"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        outline: none;
+    }
+
+    .input.error {
+        border-color: #ef4444;
+        background: #fef2f2;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 0.82rem;
+        margin-top: 6px;
+        display: none;
+    }
+
+    .btns {
+        display: flex;
+        gap: 16px;
+        margin-top: 32px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-add {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-add:hover {
+        background: #1d4ed8;
+    }
+
+    .btn-cancel {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #4b5563;
+    }
+
+    .messages {
+        margin-bottom: 24px;
+    }
+
+    .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #a7f3d0;
+    }
+
+    .alert-warning {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #fde68a;
+    }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+
+        <div class="title">
+            <h2>Add New Spare Part</h2>
+            <p>Enter details of the spare part you want to add</p>
+        </div>
+
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form method="POST" action="/myapp/addsparepart_post/" id="addSparePartForm">
+            {% csrf_token %}
+            <input type="hidden" value="{{ data.id }}" name="id">
+
+            <div class="form-group">
+                <label for="part_name">Part Name <span class="required">*</span></label>
+                <input type="text" name="part_name" id="part_name" class="input" required placeholder="e.g. Brake Pad Set">
+                <div id="partNameError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price (₹) <span class="required">*</span></label>
+                <input type="number" name="price" id="price" class="input" min="1" step="1" required placeholder="e.g. 2500">
+                <div id="priceError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Stock Quantity <span class="required">*</span></label>
+                <input type="number" name="stock" id="stock" class="input" min="0" required placeholder="e.g. 50">
+                <div id="stockError" class="error-message"></div>
+            </div>
+
+            <div class="btns">
+                <button type="submit" class="btn btn-add">Add Spare Part</button>
+                <a href="/myapp/viewsparepart/" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('addSparePartForm').addEventListener('submit', function(e) {
+        let isValid = true;
+
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.style.display = 'none';
+            el.textContent = '';
+        });
+        document.querySelectorAll('.input').forEach(el => el.classList.remove('error'));
+
+        function showError(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.style.display = 'block';
+            document.getElementById(id.replace('Error', '')).classList.add('error');
+            isValid = false;
+        }
+
+        const partName = document.getElementById('part_name').value.trim();
+        if (!partName || partName.length < 3) {
+            showError('partNameError', 'Part name must be at least 3 characters');
+        }
+
+        const price = document.getElementById('price').value.trim();
+        if (!price || parseFloat(price) < 1) {
+            showError('priceError', 'Price must be at least ₹1');
+        }
+
+        const stock = document.getElementById('stock').value.trim();
+        if (!stock || parseInt(stock) < 0) {
+            showError('stockError', 'Stock cannot be negative');
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+</script>
+
+{% endblock %}

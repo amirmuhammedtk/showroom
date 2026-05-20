@@ -1,0 +1,30 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<div class="container mt-5">
+<h3 class="text-center mb-4">My Feedback</h3>
+<a href="/myapp/send_feedback/">Send New Feedback</a>
+
+{% for i in data %}
+<div class="card shadow-sm p-3 mb-3">
+
+    <p><b>Message:</b> {{i.message}}</p>
+    <p><b>Status:</b>
+        {% if i.status == 'pending' %}
+            <span class="badge bg-warning">Pending</span>
+        {% else %}
+            <span class="badge bg-success">Replied</span>
+        {% endif %}
+    </p>
+
+    <p><b>Reply:</b> {{i.reply}}</p>
+    <p class="text-muted">{{i.date}}</p>
+
+</div>
+{% empty %}
+<h4 class="text-center text-muted">No feedback sent</h4>
+{% endfor %}
+
+</div>
+
+{% endblock %}

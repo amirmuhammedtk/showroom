@@ -1,0 +1,40 @@
+{% extends 'User/userhome.html' %}
+{% block body %}
+
+<div class="wrapper">
+    <div class="table-card">
+        <h2>My Service Bookings</h2>
+
+        {% if data %}
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Vehicle</th>
+                <th>Action</th>
+            </tr>
+
+            {% for i in data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.service_date }}</td>
+                <td>{{ i.status }}</td>
+                <td>{{ i.vehicle_model }}</td>
+                <td>
+
+                    {% if i.bill %}
+                        <a href="/myapp/user_view_bill/{{ i.id }}/">View Bill</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>No bookings yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

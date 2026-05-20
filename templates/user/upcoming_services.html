@@ -1,0 +1,21 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<div class="container mt-5">
+<h3 class="text-center mb-4">Upcoming Services</h3>
+
+{% for i in data %}
+<div class="card mb-3 shadow-sm p-3">
+    <h5>{{i.SERVICECENTER.name}}</h5>
+    <p><b>Model:</b> {{i.vehicle_model}}</p>
+    <p><b>Issue:</b> {{i.issue}}</p>
+    <p><b>Date:</b> {{i.service_date}}</p>
+    <span class="badge bg-warning">Booked</span>
+</div>
+{% empty %}
+<h4 class="text-center text-muted">No upcoming services</h4>
+{% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'admin/adminhome.html' %}
+{% block body %}
+
+<div class="card p-4">
+<h4>Reply Feedback</h4>
+
+<p><b>User:</b> {{data.CUSTOMER.name}}</p>
+<p><b>Message:</b> {{data.message}}</p>
+
+<form method="post">
+{% csrf_token %}
+<textarea name="reply" class="form-control mb-3" required></textarea>
+<button class="btn btn-success">Send Reply</button>
+</form>
+
+</div>
+
+{% endblock %}

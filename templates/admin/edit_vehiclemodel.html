@@ -1,0 +1,263 @@
+{% extends 'admin/adminhome.html' %}
+
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    }
+
+    .card-form {
+        width: 100%;
+        max-width: 720px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 40px 45px;
+        margin: 20px auto;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+    .title h2 {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin-bottom: 8px;
+    }
+
+    .title p {
+        color: #64748b;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .info-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 18px 24px;
+        margin-bottom: 32px;
+        font-size: 1.05rem;
+        color: #1e293b;
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    label {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .required {
+        color: #ef4444;
+        margin-left: 4px;
+    }
+
+    .input,
+    select.input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: #ffffff;
+        transition: all 0.2s ease;
+        color: #1f2937;
+    }
+
+    .input:focus,
+    select.input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        outline: none;
+    }
+
+    select.input {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 12px;
+        padding-right: 40px;
+    }
+
+    .btns {
+        display: flex;
+        gap: 16px;
+        margin-top: 36px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-update {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-update:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .btn-update:disabled {
+        background: #93c5fd;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-cancel {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #4b5563;
+        transform: translateY(-1px);
+    }
+
+    .error {
+        color: #ef4444;
+        font-size: 0.82rem;
+        margin-top: 6px;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .card-form {
+            padding: 30px 25px;
+        }
+        .title h2 {
+            font-size: 1.8rem;
+        }
+        .btns {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+        <div class="title">
+            <h2>Edit Vehicle Model</h2>
+            <p>Update details for this model</p>
+        </div>
+
+        <div class="info-box">
+            Brand : {{ data.COMPANY.name }}
+        </div>
+
+        <form method="POST" action="/myapp/edit_vehiclemodel_post/" id="editModelForm">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ data.id }}">
+
+            <div class="form-group">
+                <label for="model_name">Model Name <span class="required">*</span></label>
+                <input type="text"
+                       name="model_name"
+                       id="model_name"
+                       class="input"
+                       value="{{ data.model_name }}"
+                       placeholder="e.g. Fortuner, City, Creta, Nexon"
+                       required
+                       minlength="2"
+                       maxlength="80">
+                <div id="modelNameErr" class="error">Model name is required (2–80 characters)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="fuel_type">Fuel Type <span class="required">*</span></label>
+                <select name="fuel_type" id="fuel_type" class="input" required>
+                    <option value="" disabled>Select fuel type</option>
+                    <option value="Petrol"    {% if data.fuel_type == 'Petrol'    %}selected{% endif %}>Petrol</option>
+                    <option value="Diesel"    {% if data.fuel_type == 'Diesel'    %}selected{% endif %}>Diesel</option>
+                    <option value="Electric"  {% if data.fuel_type == 'Electric'  %}selected{% endif %}>Electric</option>
+                    <option value="Hybrid"    {% if data.fuel_type == 'Hybrid'    %}selected{% endif %}>Hybrid</option>
+                    <option value="CNG"       {% if data.fuel_type == 'CNG'       %}selected{% endif %}>CNG</option>
+                    <option value="Petrol+CNG"{% if data.fuel_type == 'Petrol+CNG' %}selected{% endif %}>Petrol + CNG</option>
+                </select>
+                <div id="fuelTypeErr" class="error">Please select a fuel type</div>
+            </div>
+
+            <div class="btns">
+                <button type="submit" class="btn btn-update" id="submitBtn">
+                    Update Model
+                </button>
+                <button type="button" class="btn btn-cancel"
+                        onclick="window.location.href='/myapp/adminview_vehiclemodel/'">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const form = document.getElementById('editModelForm');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', function(e) {
+    let isValid = true;
+
+    // Model Name
+    const modelName = document.getElementById('model_name');
+    const modelNameErr = document.getElementById('modelNameErr');
+    if (!modelName.value.trim() || modelName.value.trim().length < 2) {
+        modelNameErr.style.display = 'block';
+        isValid = false;
+    } else {
+        modelNameErr.style.display = 'none';
+    }
+
+    // Fuel Type
+    const fuelType = document.getElementById('fuel_type');
+    const fuelTypeErr = document.getElementById('fuelTypeErr');
+    if (!fuelType.value) {
+        fuelTypeErr.style.display = 'block';
+        isValid = false;
+    } else {
+        fuelTypeErr.style.display = 'none';
+    }
+
+    if (!isValid) {
+        e.preventDefault();
+        return;
+    }
+
+    // Show submitting state
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Updating...';
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<div class="text-center mt-5">
+    <h2>Service Bill Payment</h2>
+    <h1 class="text-success">₹ {{display_amount}}</h1>
+
+    <button id="pay-btn" class="btn btn-lg btn-primary mt-3">
+        Pay Now
+    </button>
+</div>
+
+<form id="success-form" method="POST" action="/myapp/bill_payment_success/">
+    {% csrf_token %}
+    <input type="hidden" name="bill_id" value="{{id}}">
+    <input type="hidden" name="payment_id" id="payment_id">
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+
+var options = {
+    key: "{{ razorpay_api_key }}",
+    amount: "{{ amount }}",
+    currency: "{{ currency }}",
+    name: "Vehicle Service Payment",
+
+    handler: function (response) {
+        document.getElementById("payment_id").value = response.razorpay_payment_id;
+        document.getElementById("success-form").submit();
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('pay-btn').onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>
+
+{% endblock %}

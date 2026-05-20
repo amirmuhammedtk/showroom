@@ -1,0 +1,185 @@
+{% extends 'showroom/showroomhome.html' %}
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        padding: 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        background: white;
+        padding: 28px 32px;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+    .page-header h2 {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin: 0 0 12px 0;
+    }
+
+    .page-header .model-info {
+        color: #64748b;
+        font-size: 1.1rem;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        padding: 32px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+    }
+
+    th, td {
+        padding: 16px 14px;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+        background: #1e293b;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    tr:hover {
+        background: #f8fafc;
+    }
+
+    .variant-photo {
+        width: 90px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+    }
+
+    .no-photo {
+        color: #94a3b8;
+        font-style: italic;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+        font-size: 1.1rem;
+        font-style: italic;
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-top: 24px;
+        padding: 10px 20px;
+        background: #6b7280;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+        background: #4b5563;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 992px) {
+        .page-header {
+            padding: 24px 20px;
+        }
+        .page-header h2 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<div class="wrapper">
+
+    <div class="page-header">
+        <div>
+            <h2>Variants</h2>
+            <div class="model-info">
+                Model: <strong>{{ data.first.model_name|default:"No variants found" }}</strong>
+                {% if data.first %}
+                    ({{ data.first.COMPANY.name }})
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        {% if data %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Photo</th>
+                        <th>Variant Name</th>
+                        <th>Engine CC</th>
+                        <th>Mileage</th>
+                        <th>Color</th>
+                        <th>Add Stock</th>
+                        <th>View Stock</th>
+                        <th>Add Price</th>
+                        <th>View Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for variant in data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if variant.photo %}
+                                <img src="{{ variant.photo }}" alt="{{ variant.variant_name }}" class="variant-photo">
+                            {% else %}
+                                <span class="no-photo">No photo</span>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ variant.variant_name }}</strong></td>
+                        <td>{{ variant.engine_cc }}</td>
+                        <td>{{ variant.mileage }}</td>
+                        <td>{{ variant.color }}</td>
+                        <td><a href="/myapp/addshowroomstock_get/{{ variant.id }}" class="btn btn-primary">Add Stock</a> </td>
+                        <td><a href="/myapp/showroom_viewstock/" class="btn btn-danger">View Stock</a> </td>
+                        <td><a href="/myapp/addprice_get/{{ variant.id }}" class="btn btn-success">Add Price</a> </td>
+                        <td><a href="/myapp/viewprice/{{ variant.id }}" class="btn btn-warning">View Price</a> </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-data">No variants available for this model</p>
+        {% endif %}
+
+        <div style="text-align: center;">
+            <a href="/myapp/showroomviewmodel/" class="back-btn">← Back to All Models</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

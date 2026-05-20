@@ -1,0 +1,23 @@
+{% extends 'ServiceCenter/servicecenterhome.html' %}
+{% block body %}
+
+<div class="wrapper">
+    <div class="table-card">
+        <h2>Generate Bill</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>Labor Charge</label>
+            <input type="number" name="labor" required class="form-control">
+
+            <label>Spare Parts Charge</label>
+            <input type="number" name="spare" required class="form-control">
+
+            <br>
+            <button type="submit" class="action-btn btn-bill">Generate</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'admin/adminhome.html' %}
+{% block body %}
+
+<style>
+.wrapper{display:flex;justify-content:center;padding:40px 0;}
+.card-form{width:650px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:35px;}
+.input{width:100%;padding:11px;border:1px solid #dcdfe6;border-radius:6px;margin-bottom:18px;}
+.btn-save{background:#2d89ef;color:#fff;padding:12px;border:none;border-radius:6px;width:100%;}
+.company-box{background:#f4f6f9;padding:12px;border-radius:6px;margin-bottom:18px;font-weight:600;}
+</style>
+
+<div class="wrapper">
+<div class="card-form">
+
+<h2>Edit Variant</h2>
+
+<form method="POST" action="/myapp/edit_variant_post/" enctype="multipart/form-data">
+{% csrf_token %}
+<input type="hidden" name="id" value="{{data.id}}">
+
+<div class="company-box">
+Model : {{ data.MODEL.model_name }}
+</div>
+
+<label>Variant Name</label> <input type="text" name="variant_name" class="input" value="{{data.variant_name}}" required>
+
+<label>Engine CC</label> <input type="text" name="engine_cc" class="input" value="{{data.engine_cc}}" required>
+
+<label>Mileage</label> <input type="text" name="mileage" class="input" value="{{data.mileage}}" required>
+
+<label>Color</label> <input type="text" name="color" class="input" value="{{data.color}}" required>
+
+<label>Change Photo</label> <input type="file" name="photo" class="input">
+
+<button type="submit" class="btn-save">Update Variant</button>
+
+</form>
+</div>
+</div>
+
+{% endblock %}

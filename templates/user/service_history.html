@@ -1,0 +1,31 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<div class="container mt-5">
+<h3 class="text-center mb-4">Service History & Bills</h3>
+
+{% for i in data %}
+<div class="card shadow-sm p-3 mb-3">
+
+    <h5>{{i.SERVICE.SERVICECENTER.name}}</h5>
+
+    <p><b>Model:</b> {{i.SERVICE.vehicle_model}}</p>
+    <p><b>Service Done:</b> {{i.SERVICE.issue}}</p>
+    <p><b>Amount:</b> ₹ {{i.total_amount}}</p>
+
+{% if i.status == 'paid' %}
+    <span class="badge bg-success">Paid</span>
+    <a href="/myapp/add_review/{{i.id}}/" class="btn btn-sm btn-outline-primary float-end">Add Review</a>
+
+    {% else %}
+        <a href="/myapp/pay_bill/{{i.id}}/" class="btn btn-success">Pay Now</a>
+    {% endif %}
+
+</div>
+{% empty %}
+<h4 class="text-center text-muted">No service history</h4>
+{% endfor %}
+
+</div>
+
+{% endblock %}

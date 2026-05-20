@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showroom Registration - E-Showroom</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 580px;
+            background: #1e293b;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.1rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .form-wrapper {
+            padding: 40px 45px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #f87171;
+            margin-left: 4px;
+        }
+
+        .input,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #0f172a;
+            color: #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        .input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+            outline: none;
+        }
+
+        .file-label {
+            display: block;
+            padding: 12px 16px;
+            background: #0f172a;
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .file-label:hover {
+            border-color: #3b82f6;
+            background: #1e293b;
+        }
+
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .error-message {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            color: #f87171;
+            display: none;
+        }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            background: #7f1d1d;
+            color: #fecaca;
+            border: 1px solid #991b1b;
+            text-align: center;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            color: #60a5fa;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .form-wrapper {
+                padding: 30px 25px;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Showroom Registration</h1>
+        <p>Join our platform and start selling vehicles today</p>
+    </div>
+
+    <div class="form-wrapper">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="/myapp/showroom_signup/" enctype="multipart/form-data" id="signupForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Showroom Name <span class="required">*</span></label>
+                <input type="text" name="name" id="name" class="input" required placeholder="Enter showroom name">
+                <div id="nameErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="place">Place / City <span class="required">*</span></label>
+                <input type="text" name="place" id="place" class="input" required placeholder="e.g. Ernakulam">
+                <div id="placeErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="pincode">Pincode <span class="required">*</span></label>
+                <input type="text" name="pincode" id="pincode" class="input" required placeholder="e.g. 682018">
+                <div id="pincodeErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="district">District <span class="required">*</span></label>
+                <input type="text" name="district" id="district" class="input" required placeholder="e.g. Ernakulam">
+                <div id="districtErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="state">State <span class="required">*</span></label>
+                <input type="text" name="state" id="state" class="input" required placeholder="e.g. Kerala">
+                <div id="stateErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" name="phone" id="phone" class="input" required placeholder="e.g. 9876543210">
+                <div id="phoneErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" name="email" id="email" class="input" required placeholder="example@showroom.com">
+                <div id="emailErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input type="password" name="password" id="password" class="input" required placeholder="Minimum 8 characters">
+                <div id="passwordErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="file-label" for="license">
+                    Upload License Proof (JPG/PNG, max 5MB) <span class="required">*</span>
+                </label>
+                <input type="file" name="license" id="license" accept="image/jpeg,image/png" required hidden>
+                <div id="licenseName" class="file-name"></div>
+                <div id="licenseErr" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="file-label" for="photo">
+                    Upload Showroom Photo (JPG/PNG, max 5MB) <span class="required">*</span>
+                </label>
+                <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" required hidden>
+                <div id="photoName" class="file-name"></div>
+                <div id="photoErr" class="error-message"></div>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">Register Showroom</button>
+
+            <div class="login-link">
+                Already have an account? <a href="/myapp/login_get/">Login here</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // File name preview + size/type validation
+    document.getElementById('license').addEventListener('change', function(e) {
+        validateFile(this, 'licenseName', 'licenseErr');
+    });
+
+    document.getElementById('photo').addEventListener('change', function(e) {
+        validateFile(this, 'photoName', 'photoErr');
+    });
+
+    function validateFile(input, nameElId, errElId) {
+        const file = input.files[0];
+        const nameEl = document.getElementById(nameElId);
+        const errEl = document.getElementById(errElId);
+
+        nameEl.textContent = '';
+        errEl.style.display = 'none';
+
+        if (!file) return;
+
+        const validTypes = ['image/jpeg', 'image/png'];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        if (!validTypes.includes(file.type)) {
+            errEl.textContent = 'Only JPG or PNG files allowed';
+            errEl.style.display = 'block';
+            input.value = '';
+            return;
+        }
+
+        if (file.size > maxSize) {
+            errEl.textContent = 'File size must be less than 5MB';
+            errEl.style.display = 'block';
+            input.value = '';
+            return;
+        }
+
+        nameEl.textContent = `Selected: ${file.name}`;
+    }
+
+    // Form validation
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        let isValid = true;
+        const errors = document.querySelectorAll('.error-message');
+        errors.forEach(el => el.style.display = 'none');
+
+        // Name
+        const name = document.getElementById('name').value.trim();
+        if (name.length < 3 || !/^[A-Za-z\s]+$/.test(name)) {
+            document.getElementById('nameErr').textContent = 'Name must be at least 3 letters';
+            document.getElementById('nameErr').style.display = 'block';
+            isValid = false;
+        }
+
+        // Place/District/State
+        ['place', 'district', 'state'].forEach(id => {
+            const val = document.getElementById(id).value.trim();
+            if (val.length < 3 || !/^[A-Za-z\s-]+$/.test(val)) {
+                document.getElementById(id + 'Err').textContent = 'Invalid format';
+                document.getElementById(id + 'Err').style.display = 'block';
+                isValid = false;
+            }
+        });
+
+        // Pincode
+        const pincode = document.getElementById('pincode').value.trim();
+        if (!/^\d{6}$/.test(pincode)) {
+            document.getElementById('pincodeErr').textContent = 'Pincode must be 6 digits';
+            document.getElementById('pincodeErr').style.display = 'block';
+            isValid = false;
+        }
+
+        // Phone
+        const phone = document.getElementById('phone').value.trim();
+        if (!/^\d{10}$/.test(phone)) {
+            document.getElementById('phoneErr').textContent = 'Phone must be 10 digits';
+            document.getElementById('phoneErr').style.display = 'block';
+            isValid = false;
+        }
+
+        // Email
+        const email = document.getElementById('email').value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            document.getElementById('emailErr').textContent = 'Invalid email format';
+            document.getElementById('emailErr').style.display = 'block';
+            isValid = false;
+        }
+
+        // Password
+        const password = document.getElementById('password').value;
+        if (password.length < 8) {
+            document.getElementById('passwordErr').textContent = 'Password must be at least 8 characters';
+            document.getElementById('passwordErr').style.display = 'block';
+            isValid = false;
+        }
+
+        // Files
+        if (!document.getElementById('license').files.length) {
+            document.getElementById('licenseErr').textContent = 'License proof is required';
+            document.getElementById('licenseErr').style.display = 'block';
+            isValid = false;
+        }
+        if (!document.getElementById('photo').files.length) {
+            document.getElementById('photoErr').textContent = 'Showroom photo is required';
+            document.getElementById('photoErr').style.display = 'block';
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+{% extends 'user/userhome.html' %}
+{% block body %}
+
+<style>
+.wrapper{max-width:1300px;margin:auto;padding:30px}
+.title{font-size:28px;font-weight:700;text-align:center;margin-bottom:25px;color:#1e293b}
+
+.filter-box{
+    background:white;padding:18px;border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,.07);margin-bottom:25px;text-align:center;
+}
+.filter-box select{
+    padding:10px 15px;border-radius:8px;border:1px solid #ddd;width:300px
+}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+
+.card{
+    background:white;border-radius:16px;padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.25s;
+}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.12)}
+
+.part-name{font-size:20px;font-weight:700;color:#0f172a;margin-bottom:10px}
+.meta{color:#475569;margin:4px 0;font-size:14px}
+
+.price{font-size:22px;font-weight:700;color:#1d4ed8;margin-top:10px}
+
+.stock{
+    display:inline-block;margin-top:8px;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600
+}
+.instock{background:#dcfce7;color:#166534}
+.lowstock{background:#fef9c3;color:#854d0e}
+
+.qty{
+    width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin:10px 0
+}
+
+.btn{
+    width:100%;padding:11px;border:none;border-radius:10px;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;font-weight:600;cursor:pointer;transition:.2s
+}
+.btn:hover{opacity:.9}
+</style>
+
+<div class="wrapper">
+
+<div class="title">Spare Parts</div>
+
+<!-- FILTER DROPDOWN -->
+<div class="filter-box">
+<form method="get">
+<select name="servicecenter" onchange="this.form.submit()">
+<option value="">All Service Centers</option>
+
+{% for c in centers %}
+<option value="{{c.id}}" {% if selected_center == c.id|stringformat:"s" %}selected{% endif %}>
+{{c.name}} - {{c.place}}
+</option>
+{% endfor %}
+
+</select>
+</form>
+</div>
+
+<!-- PARTS GRID -->
+<div class="grid">
+
+{% if data %}
+    {% for part in data %}
+    <div class="card">
+
+        <div class="part-name">{{part.obj.part_name}}</div>
+
+        <div class="meta"><b>Vehicle:</b> {{part.obj.MODEL.model_name}}</div>
+        <div class="meta"><b>Service Center:</b> {{part.obj.SERVICECENTER.name}}</div>
+
+        <div class="price">₹ {{part.obj.price}}</div>
+
+        <div class="stock {% if part.is_high %}instock{% else %}lowstock{% endif %}">
+        Stock: {{part.stock}}
+        </div>
+
+        <form action="/myapp/addtocart/{{part.obj.id}}/" method="post">
+        {% csrf_token %}
+        <input type="number" name="qty" min="1" max="{{part.stock}}" class="qty" required>
+        <button class="btn">Add to Cart</button>
+        </form>
+
+    </div>
+    {% endfor %}
+{% else %}
+    <h3 style="text-align:center;color:#64748b">No spare parts available</h3>
+{% endif %}
+
+</div>
+</div>
+
+{% endblock %}

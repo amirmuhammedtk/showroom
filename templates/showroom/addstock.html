@@ -1,0 +1,92 @@
+{% extends 'showroom/showroomhome.html' %}
+{% block body %}
+
+<style>
+    body { background: #f5f7fa; font-family: 'Segoe UI', sans-serif; color: #2d3748; }
+    .wrapper { padding: 40px 20px; max-width: 700px; margin: 0 auto; }
+    .card-form { background: white; border-radius: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.08); padding: 40px 45px; }
+    .title { text-align: center; margin-bottom: 38px; }
+    .title h2 { font-size: 2rem; font-weight: 700; color: #1a365d; }
+    .variant-info { background: #f8fafc; padding: 20px; border-radius: 10px; margin-bottom: 32px; border: 1px solid #e2e8f0; }
+    .form-group { margin-bottom: 24px; }
+    label { font-weight: 600; color: #1e293b; margin-bottom: 8px; display: block; font-size: 0.95rem; }
+    .required { color: #ef4444; margin-left: 4px; }
+    .input { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+    .input:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.12); outline: none; }
+    .input.error { border-color: #ef4444; background: #fef2f2; }
+    .error-message { color: #ef4444; font-size: 0.82rem; margin-top: 6px; display: none; }
+    .btns { display: flex; gap: 16px; margin-top: 32px; }
+    .btn { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .btn-add { background: #2563eb; color: white; }
+    .btn-add:hover { background: #1d4ed8; }
+    .btn-cancel { background: #6b7280; color: white; }
+    .btn-cancel:hover { background: #4b5563; }
+    .messages { margin-bottom: 24px; }
+    .alert-success { background: #d1fae5; color: #065f46; padding: 14px; border-radius: 8px; border: 1px solid #a7f3d0; }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+
+        <div class="title">
+            <h2>Add Stock</h2>
+            <p>Update inventory for this vehicle variant</p>
+        </div>
+
+        <div class="variant-info">
+            <h4>Selected Variant</h4>
+            <p><strong>Model:</strong> {{ data.MODEL.model_name }}</p>
+            <p><strong>Company:</strong> {{ data.MODEL.COMPANY.name }}</p>
+            <p><strong>Variant:</strong> {{ data.variant_name }}</p>
+            <p><strong>Engine CC:</strong> {{ data.engine_cc }}</p>
+            <p><strong>Mileage:</strong> {{ data.mileage }}</p>
+            <p><strong>Color:</strong> {{ data.color }}</p>
+        </div>
+
+        <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form method="POST" action="/myapp/addstock_post/" id="addStockForm">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ data.id }}">
+
+            <div class="form-group">
+                <label for="quantity">Quantity to Add <span class="required">*</span></label>
+                <input type="number" name="quantity" id="quantity" class="input" 
+                       min="1" required placeholder="Enter number of units">
+                <div id="quantityError" class="error-message"></div>
+            </div>
+
+            <div class="btns">
+                <button type="submit" class="btn btn-add">Add Stock</button>
+                <a href="/myapp/showroomviewstock/" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('addStockForm').addEventListener('submit', function(e) {
+        const qty = document.getElementById('quantity').value.trim();
+        const errEl = document.getElementById('quantityError');
+
+        errEl.style.display = 'none';
+        errEl.textContent = '';
+
+        if (!qty || parseInt(qty) < 1) {
+            e.preventDefault();
+            errEl.textContent = 'Please enter a valid quantity (1 or more)';
+            errEl.style.display = 'block';
+            document.getElementById('quantity').classList.add('error');
+        }
+    });
+</script>
+
+{% endblock %}

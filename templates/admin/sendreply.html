@@ -1,0 +1,190 @@
+{% extends 'admin/adminhome.html' %}
+{% block body %}
+
+<style>
+    body {
+        background: #f5f7fa;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: #2d3748;
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    }
+
+    .card-form {
+        width: 100%;
+        max-width: 780px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        padding: 40px 45px;
+        margin: 20px auto;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+    .title h2 {
+        font-size: 2.1rem;
+        font-weight: 700;
+        color: #1a365d;
+        margin-bottom: 8px;
+    }
+
+    .title p {
+        color: #64748b;
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .feedback-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin-bottom: 32px;
+        font-size: 1.05rem;
+        color: #1e293b;
+    }
+
+    .feedback-box .customer {
+        font-weight: 600;
+        color: #2563eb;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    label {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .required {
+        color: #ef4444;
+        margin-left: 4px;
+    }
+
+    textarea.input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: #ffffff;
+        transition: all 0.2s ease;
+        min-height: 160px;
+        resize: vertical;
+    }
+
+    textarea.input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        outline: none;
+    }
+
+    .btns {
+        display: flex;
+        gap: 16px;
+        margin-top: 36px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-send {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-send:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .btn-cancel {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #4b5563;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .card-form {
+            padding: 30px 25px;
+        }
+        .title h2 {
+            font-size: 1.8rem;
+        }
+        .btns {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="wrapper">
+    <div class="card-form">
+        <div class="title">
+            <h2>Reply to Feedback</h2>
+            <p>Respond to customer concern</p>
+        </div>
+
+        <div class="feedback-box">
+            <span class="customer">From: {{ data.CUSTOMER.name }}</span>
+            <p style="margin: 12px 0; white-space: pre-wrap;">{{ data.message }}</p>
+            <small class="text-muted">Received on: {{ data.date }}</small>
+        </div>
+
+        <form method="POST" action="/myapp/sendreply_post/">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ data.id }}">
+
+            <div class="form-group">
+                <label for="reply">Your Reply <span class="required">*</span></label>
+                <textarea 
+                    name="reply" 
+                    id="reply" 
+                    class="input" 
+                    placeholder="Type your response here..."
+                    required
+                    minlength="10"></textarea>
+            </div>
+
+            <div class="btns">
+                <button type="submit" class="btn btn-send">Send Reply</button>
+                <button type="button" class="btn btn-cancel" 
+                        onclick="window.location.href='/myapp/viewfeedback/'">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
